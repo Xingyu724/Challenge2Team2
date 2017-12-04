@@ -3,25 +3,38 @@ from tkinter import ttk
 from decimal import *
 
 root = Tk()
+displayed_temp = StringVar()
+displayed_ph = StringVar()
+displayed_stir = StringVar()
 
 def update_temppoint():
     if temp_verification(var_values[0].get()) == True:
         temp_set = Decimal(var_values[0].get())
-        displayed_temp = ttk.Label(root, text = "Current temperature setpoint: " + str(temp_set) + "\u2103").grid(row = 3, column = 0)
-    # else:
-       # displayed_temp = ttk.Label(root, text = "Please enter a value between 25 and 35 (inclusive).").grid(row = 3, column = 0) 
+        displayed_temp.set("Current temperature setpoint: " + str(temp_set) + "\u2103")
+    else:
+        displayed_temp.set("Please enter a value between 25 and 35 (inclusive).")
+    ttk.Label(root, textvariable = displayed_temp).grid(row = 3, column = 0) 
     var_values[0].delete(0, 100)
     
 
 def update_phpoint():
-    ph_set = Decimal(var_values[1].get())
+    if ph_verification(var_values[1].get()) == True:
+        ph_set = Decimal(var_values[1].get())
+        displayed_ph.set("Current pH setpoint: " + str(ph_set))
+    else:
+        displayed_ph.set("Please enter a value between 3 and 7 (inclusive).")
+    ttk.Label(root, textvariable = displayed_ph).grid(row = 4, column = 0) 
     var_values[1].delete(0, 100)
-    ttk.Label(root, text = "Current pH setpoint: " + str(ph_set)).grid(row = 4, column = 0)
+
 
 def update_stirpoint():
-    stir_set = Decimal(var_values[2].get())
+    if stir_verification(var_values[2].get()) == True:
+        stir_set = Decimal(var_values[2].get())
+        displayed_stir.set("Current stirring setpoint: " + str(stir_set) + " RPM")
+    else:
+        displayed_stir.set("Please enter a value between 500 and 1500 (inclusive).")
+    ttk.Label(root, textvariable = displayed_stir).grid(row = 5, column = 0) 
     var_values[2].delete(0, 100)
-    ttk.Label(root, text = "Current stirring setpoint: " + str(stir_set) + " RPM").grid(row = 5, column = 0)
     
 
 controllables = ['Temperature', 'pH', 'Stirring']
@@ -30,14 +43,31 @@ command_names = [update_temppoint, update_phpoint, update_stirpoint]
 units = ['(\u2103)', '', '(RPM)']
 
 def temp_verification(entered):
-    if entered.isdigit() == True:
-        if int(entered) >= 25:
+    if entered.isdigit():
+        if Decimal(entered) >= 25 and Decimal(entered) <= 35:
             return True
         else:
             return False
     else:
         return False
 
+def ph_verification(entered):
+    if entered.isdigit():
+        if Decimal(entered) >= 3 and Decimal(entered) <= 7:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+def stir_verification(entered):
+    if entered.isdigit():
+        if Decimal(entered) >= 500 and Decimal(entered) <= 1500:
+            return True
+        else:
+            return False
+    else:
+        return False
 
 
 for i in range (0, 3):
