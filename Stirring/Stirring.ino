@@ -24,12 +24,12 @@ void setup()
 void loop()
 {
   Serial.println(rpm);
-  while(Serial.available>0)
+  while(Serial.available()>0)
     {
       motorspeed=Serial.read();
     }
   if(motorspeed<=1500&&motorspeed>=500)
-    { 
+    { M
       while(analogspeed>127)
         analogspeed=127;
       if(rpm<motorspeed-20)
