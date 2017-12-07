@@ -1,5 +1,5 @@
 
-#define power P2_4
+#define power P1_6
 #define readsensor P1_3
 int motorspeed;
 volatile int rpm;
@@ -15,7 +15,7 @@ void setup()
   pinMode(power,OUTPUT);
   attachInterrupt(readsensor,measure,RISING);
   analogspeed=20;
-  motorspeed=600;
+  motorspeed=1000;
   rpm=0;
   interrupts();
 }
@@ -24,19 +24,22 @@ void setup()
 void loop()
 {
   Serial.println(rpm);
+  
   while(Serial.available()>0)
     {
     motorspeed=Serial.read();
     }
-  analogWrite(power,analogspeed);
   
+ 
   if(motorspeed<=1500&&motorspeed>=500)
     { 
       while(analogspeed>127)
-        analogspeed=127;
+        {
+          analogspeed=127;
+        }
       if(rpm<motorspeed)
           {
-             analogspeed++;
+             analogspeed+=1;
              analogWrite(power,analogspeed);
           }
        else if(rpm==motorspeed)
@@ -45,7 +48,7 @@ void loop()
           }
       else
           {
-            analogspeed--; 
+            analogspeed-=1; 
             analogWrite(power,analogspeed);
           }
     }
